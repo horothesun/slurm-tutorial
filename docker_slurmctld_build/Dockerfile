@@ -1,7 +1,8 @@
 FROM docker-slurm:latest
 
 #RUN groupadd -r mysql && useradd -r -g mysql mysql
-#RUN yum -y install mariadb-server mariadb-client
+RUN yum -y install mariadb-server mariadb-client
+# TODO: add `mariadb-libs` to the line above if `sacct` doesn't work
 #EXPOSE 3306
 ADD deploy.sh /root/deploy.sh
 RUN chmod +x /root/deploy.sh
@@ -13,7 +14,7 @@ RUN chmod +x /root/deploy.sh
 #ADD docker-entrypoint.sh /root/
 #RUN chmod +x /root/docker-entrypoint.sh
 
-ADD launch_DB.sh /opt/slurm-16.05.4/
+ADD launch_DB.sh /opt/slurm-17.02.11/
 ADD slurmdbd.conf /usr/local/etc/
 ADD supervisord.slurmctld /etc/supervisord.d/slurmctld.ini
 #ADD supervisord.slurmdbd /etc/supervisord.d/slurmdbd.ini

@@ -12,9 +12,9 @@ WORKDIR /opt
 #RUN wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
 #RUN rpm -ivh epel-release-7-8.noarch.rpm
 
-RUN curl -OfsL http://www.schedmd.com/download/total/slurm-16.05.4.tar.bz2
-RUN bzip2 -dc slurm-16.05.4.tar.bz2 | tar xvf -
-WORKDIR /opt/slurm-16.05.4
+RUN curl -OfsL https://download.schedmd.com/slurm/slurm-17.02.11.tar.bz2
+RUN bzip2 -dc slurm-17.02.11.tar.bz2 | tar xvf -
+WORKDIR /opt/slurm-17.02.11
 RUN ./configure
 RUN make
 RUN make install
