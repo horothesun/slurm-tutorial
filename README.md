@@ -26,14 +26,11 @@ cd slurm-tutorial
 
 You can see the procedure the deployment is going to follow by opening the `launch.sh` file in that directory.
 
-In the first usage of the script and if you don't have docker-slurm image the procedure will build everything from scratch "build images step".
-This might take some time depending on the quality of the connection.
-
-There is one main docker image called docker-slurm that contains all packages and 2 other images which specialize on the role of the node within the cluster.
-The docker-slurmctld image will be used for the controller side (slurmctld and slurmdbd daemons) whereas the docker-slurmd image for the compute nodes (slurmd daemon).
+There is one main docker image called `docker-slurm` that contains all packages and 2 other images which specialize on the role of the node within the cluster.
+The `docker-slurmctld` image will be used for the controller side (`slurmctld` and `slurmdbd` daemons) whereas the `docker-slurmd` image for the compute nodes (`slurmd` daemon).
 Once the build process is finished the procedure continues in deploying the cluster based on the images created "deploy cluster step" .
 
-Execute the `launch.sh` script by using the following command:
+Update `-v <HOME_BASED_PATH_TO_REPO>/ctld_ext:/opt/slurm-17.11.9/ext` in `launch.sh` file, then execute the it by using the following command:
 
 ```bash
 ./launch.sh
@@ -71,7 +68,7 @@ c1
 
 The configuration files for Slurm can be found under /usr/local/etc/
 
-For a configuration parameter to take effect you can make changes on the slurm.conf file of the controller, then transfer the file on all compute nodes and restart the daemons. For this you can use `clush` command which exists within the already deployed environment.
+For a configuration parameter to take effect you can make changes on the `slurm.conf` file of the controller, then transfer the file on all compute nodes and restart the daemons. For this you can use `clush` command which exists within the already deployed environment.
 
 ```
 [root@ctld slurm-17.11.9]# clush -bw c[0-3] -c /usr/local/etc/slurm.conf
@@ -91,7 +88,7 @@ While on the controller. Execute the following script:
 [root@ctld slurm-17.11.9]# /opt/slurm-17.11.9/launch_DB.sh
 ```
 
-This will change the slurm.conf file to activate the mysql database, it will initialize the slurm database and restart daemons for the changes to take effect.
+This will change the `slurm.conf` file to activate the mysql database, it will initialize the slurm database and restart daemons for the changes to take effect.
 
 You can now use the `sacct` command to follow the accounting of jobs.
 
@@ -129,6 +126,52 @@ For example a simple user doesn't have the right to see the accounting of root's
 
 Since ssh is activate within the node and it is possible to go around from the controller to the compute nodes with ssh. Here is the guest password `"guest1234"`.
 
+#### Other usage example
+
+Connect to the cluster `ctld` container with
+
+```bash
+docker exec -t -i ctld /bin/bash
+```
+
+then configure the DB with
+
+```
+[root@ctld slurm-17.11.9]# ./launch_DB.sh
+```
+
+and verify with
+
+```
+[root@ctld slurm-17.11.9]# sacct
+       JobID    JobName  Partition    Account  AllocCPUS      State ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- -------- 
+```
+
+Run the provided example with
+
+```
+[root@ctld slurm-17.11.9]# sbatch ext/hello-world.slurm
+Submitted batch job 2
+[root@ctld slurm-17.11.9]# sacct
+       JobID    JobName  Partition    Account  AllocCPUS      State ExitCode
+------------ ---------- ---------- ---------- ---------- ---------- --------
+2            hello-wor+     normal       root          1  COMPLETED      0:0
+2.batch           batch                  root          1  COMPLETED      0:0
+2.0                echo                  root          1  COMPLETED      0:0
+```
+
+and get the result `hello-world.txt` connecting to the `c0` container from another terminal with
+
+```bash
+docker exec -t -i c0 /bin/bash
+```
+
+```
+[root@c0 slurm-17.11.9]# cat hello-world.txt
+Hello World!
+```
+
 #### Tearing down the cluster
 
 To tear-down the cluster, run
@@ -140,3 +183,7 @@ To tear-down the cluster, run
 ### 5. Hands-ON: Experiment with Slurm configuration and usage through exercises
 
 Now that the Slurm cluster is up and running you can start experimenting following the tutorial and the hands-on exercises available on the slides here: [SLURM_Tutorial_Cluster2016.pdf](https://github.com/RJMS-Bull/slurm-tutorial/blob/master/SLURM_Tutorial_Cluster2016.pdf).
+
+### References
+
+- SLURM older versions: https://www.schedmd.com/archives.php
