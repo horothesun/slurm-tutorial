@@ -52,16 +52,16 @@ docker exec -t -i ctld /bin/bash
 If everything worked fine until now you will be connected upon the controller of the cluster.
 
 ```
-[root@ctld slurm-17.02.11]#
+[root@ctld slurm-17.11.9]#
 ```
 
 You can start using the Slurm cluster by issuing different Slurm commands:
 
 ```
-[root@ctld slurm-17.02.11]# sinfo
+[root@ctld slurm-17.11.9]# sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 normal*      up 1-00:00:00      4   idle c[0-3]
-[root@ctld slurm-17.02.11]# srun -n3 -N3 /bin/hostname
+[root@ctld slurm-17.11.9]# srun -n3 -N3 /bin/hostname
 c0
 c2
 c1
@@ -74,11 +74,11 @@ The configuration files for Slurm can be found under /usr/local/etc/
 For a configuration parameter to take effect you can make changes on the slurm.conf file of the controller, then transfer the file on all compute nodes and restart the daemons. For this you can use `clush` command which exists within the already deployed environment.
 
 ```
-[root@ctld slurm-17.02.11]# clush -bw c[0-3] -c /usr/local/etc/slurm.conf
-[root@ctld slurm-17.02.11]# clush -bw c[0-3] pkill slurmd
-[root@ctld slurm-17.02.11]# pkill slurmctld
-[root@ctld slurm-17.02.11]# clush -bw c[0-1] slurmd
-[root@ctld slurm-17.02.11]# slurmctld
+[root@ctld slurm-17.11.9]# clush -bw c[0-3] -c /usr/local/etc/slurm.conf
+[root@ctld slurm-17.11.9]# clush -bw c[0-3] pkill slurmd
+[root@ctld slurm-17.11.9]# pkill slurmctld
+[root@ctld slurm-17.11.9]# clush -bw c[0-1] slurmd
+[root@ctld slurm-17.11.9]# slurmctld
 ```
 
 ### 4. Activate Slurm database with slurmdbd daemon
@@ -88,7 +88,7 @@ By default the usage of the database is deactivated. However the database in Slu
 While on the controller. Execute the following script:
 
 ```
-[root@ctld slurm-17.02.11]# /opt/slurm-17.02.11/launch_DB.sh
+[root@ctld slurm-17.11.9]# /opt/slurm-17.11.9/launch_DB.sh
 ```
 
 This will change the slurm.conf file to activate the mysql database, it will initialize the slurm database and restart daemons for the changes to take effect.
@@ -96,7 +96,7 @@ This will change the slurm.conf file to activate the mysql database, it will ini
 You can now use the `sacct` command to follow the accounting of jobs.
 
 ```
-[root@ctld slurm-17.02.11]# sacct
+[root@ctld slurm-17.11.9]# sacct
        JobID    JobName  Partition    Account  AllocCPUS      State ExitCode 
 ------------ ---------- ---------- ---------- ---------- ---------- -------- 
 2              hostname     normal       root          3  COMPLETED      0:0 
@@ -108,18 +108,18 @@ You can now use the `sacct` command to follow the accounting of jobs.
 root has advanced privileges when using Slurm commands. You can change to user guest in order to see how a simple user can make use of the Slurm cluster.
 
 ```
-[root@ctld slurm-17.02.11]# su guest
-[guest@ctld slurm-17.02.11]$
-[guest@ctld slurm-17.02.11]$ sinfo
+[root@ctld slurm-17.11.9]# su guest
+[guest@ctld slurm-17.11.9]$
+[guest@ctld slurm-17.11.9]$ sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 normal*      up 1-00:00:00      4   idle c[0-3]
-[guest@ctld slurm-17.02.11]$ squeue
+[guest@ctld slurm-17.11.9]$ squeue
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-[guest@ctld slurm-17.02.11]$ srun -n3 /bin/hostname
+[guest@ctld slurm-17.11.9]$ srun -n3 /bin/hostname
 c0
 c0
 c0
-[guest@ctld slurm-17.02.11]$ sacct
+[guest@ctld slurm-17.11.9]$ sacct
        JobID    JobName  Partition    Account  AllocCPUS      State ExitCode 
 ------------ ---------- ---------- ---------- ---------- ---------- -------- 
 5              hostname     normal                     3  COMPLETED      0:0 

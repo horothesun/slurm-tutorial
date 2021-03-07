@@ -14,7 +14,7 @@ RUN chmod +x /root/deploy.sh
 #ADD docker-entrypoint.sh /root/
 #RUN chmod +x /root/docker-entrypoint.sh
 
-ADD launch_DB.sh /opt/slurm-17.02.11/
+ADD launch_DB.sh /opt/slurm-17.11.9/
 ADD slurmdbd.conf /usr/local/etc/
 ADD supervisord.slurmctld /etc/supervisord.d/slurmctld.ini
 #ADD supervisord.slurmdbd /etc/supervisord.d/slurmdbd.ini
