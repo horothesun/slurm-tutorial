@@ -25,7 +25,7 @@ docker run \
   -p 11134:22 \
   -e "container=docker" \
   -v /sys/fs/cgroup:/sys/fs/cgroup \
-  -v ~/GitHub/horothesun/slurm-tutorial/ctld_ext:/opt/slurm-17.02.11/ext \
+  -v ~/GitHub/horothesun/slurm-tutorial/ctld_ext:/opt/slurm-20.11.4/ext \
   --name ctld --hostname ctld \
   docker-slurmctld
 sleep 2

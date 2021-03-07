@@ -7,14 +7,15 @@ FROM yajo/centos-epel:latest
 RUN yum -y install clustershell
 RUN yum -y install supervisor
 RUN yum -y install man mariadb mariadb-devel gcc gcc-g++ make munge munge-devel bzip2 vim-minimal tar curl perl
+RUN yum -y install python3
 # Configure munge RUN create-munge-key
 WORKDIR /opt
 #RUN wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
 #RUN rpm -ivh epel-release-7-8.noarch.rpm
 
-RUN curl -OfsL https://download.schedmd.com/slurm/slurm-17.02.11.tar.bz2
-RUN bzip2 -dc slurm-17.02.11.tar.bz2 | tar xvf -
-WORKDIR /opt/slurm-17.02.11
+RUN curl -OfsL https://download.schedmd.com/slurm/slurm-20.11.4.tar.bz2
+RUN bzip2 -dc slurm-20.11.4.tar.bz2 | tar xvf -
+WORKDIR /opt/slurm-20.11.4
 RUN ./configure
 RUN make
 RUN make install
